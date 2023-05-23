@@ -3,9 +3,9 @@ import { Button, Input, Text } from "react-native-elements";
 import React, { useLayoutEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { serverTimestamp } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 export default function RegistrationScreen({ navigation, route }) {
   const [name, SetName] = useState("");
@@ -21,17 +21,16 @@ export default function RegistrationScreen({ navigation, route }) {
   }, [navigation]);
 
   function Register() {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        authUser.user.update({
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((authUser) =>
+        updateProfile(authUser.user, {
           displayName: name,
           photoURL:
             imageURL ||
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
-          timestamp: serverTimestamp(),
-        });
-      })
+        })
+      )
+      .then(() => navigation.replace("Home"))
       .catch((error) => alert(error.message));
   }
 
@@ -71,6 +70,8 @@ export default function RegistrationScreen({ navigation, route }) {
           placeholder="Profile Picture URL (optional)"
           value={imageURL}
           onChangeText={SetImageURL}
+          keyboardType="url"
+          textContentType="URL"
         />
       </View>
 

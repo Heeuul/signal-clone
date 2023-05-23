@@ -1,13 +1,28 @@
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Button, Input, Image } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { auth } from "../firebase";
 
 export default function LoginScreen({ navigation }) {
   const [email, SetEmail] = useState("");
   const [password, SetPassword] = useState("");
 
-  function SignIn() {}
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        navigation.replace("Home");
+      }
+    });
+
+    return unsubscribe();
+  }, [auth]);
+
+  function SignIn() {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => alert(error));
+  }
 
   return (
     <KeyboardAvoidingView
