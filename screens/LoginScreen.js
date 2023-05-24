@@ -3,6 +3,7 @@ import { Button, Input, Image } from "react-native-elements";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function LoginScreen({ navigation }) {
   const [email, SetEmail] = useState("");
@@ -19,9 +20,9 @@ export default function LoginScreen({ navigation }) {
   }, [auth]);
 
   function SignIn() {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .catch((error) => alert(error));
+    signInWithEmailAndPassword(auth, email, password).catch((error) =>
+      alert(error)
+    );
   }
 
   return (
