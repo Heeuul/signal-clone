@@ -2,9 +2,9 @@ import { Avatar, ListItem } from "react-native-elements";
 import { StyleSheet } from "react-native";
 import React from "react";
 
-export default function CustomListItem({ id, chat, EnterChat }) {
+export default function CustomListItem({ id, chatName, EnterChat }) {
   return (
-    <ListItem>
+    <ListItem key={id} bottomDivider>
       <Avatar
         rounded
         source={{
@@ -13,7 +13,7 @@ export default function CustomListItem({ id, chat, EnterChat }) {
       />
       <ListItem.Content>
         <ListItem.Title style={{ fontWeight: "800" }}>
-          Youtube Chat
+          {chatName}
         </ListItem.Title>
         <ListItem.Subtitle numberOfLines={1} ellipsizeMode="tail">
           Subtitle for testing Subtitle for testing Subtitle for testing

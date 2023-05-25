@@ -20,9 +20,9 @@ export default function LoginScreen({ navigation }) {
   }, [auth]);
 
   function SignIn() {
-    signInWithEmailAndPassword(auth, email, password).catch((error) =>
-      alert(error)
-    );
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => navigation.replace("Home"))
+      .catch((error) => alert(error));
   }
 
   return (

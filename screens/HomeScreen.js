@@ -3,15 +3,33 @@ import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useLayoutEffect } from "react";
 import { Avatar } from "react-native-elements";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import { useState } from "react";
 
 import CustomListItem from "../components/CustomListItem";
 import { auth, db } from "../firebase";
+import { useEffect } from "react";
 
 export default function HomeScreen({ navigation }) {
+  const [chats, SetChats] = useState([]);
+
   function SignOutUser() {
     signOut(auth).then(() => navigation.replace("Login"));
   }
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "chats"), (snapshot) => {
+      SetChats(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    });
+
+    return unsubscribe;
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,7 +62,12 @@ export default function HomeScreen({ navigation }) {
             <AntDesign name="camerao" size={24} color={"black"} />
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5}>
-            <SimpleLineIcons name="pencil" size={24} color={"black"} />
+            <SimpleLineIcons
+              name="pencil"
+              size={24}
+              color={"black"}
+              onPress={() => navigation.navigate("AddChat")}
+            />
           </TouchableOpacity>
         </View>
       ),
@@ -54,7 +77,9 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView>
       <ScrollView>
-        <CustomListItem />
+        {chats.map(({ id, data: { chatName } }) => (
+          <CustomListItem key={id} id={id} chatName={chatName} />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
