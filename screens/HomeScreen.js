@@ -1,4 +1,4 @@
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, TouchableOpacity, View, StyleSheet } from "react-native";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useLayoutEffect } from "react";
@@ -74,13 +74,28 @@ export default function HomeScreen({ navigation }) {
     });
   }, [navigation]);
 
+  function EnterChat(id, chatName) {
+    navigation.navigate("Chat", { id, chatName });
+  }
+
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView style={styles.container}>
         {chats.map(({ id, data: { chatName } }) => (
-          <CustomListItem key={id} id={id} chatName={chatName} />
+          <CustomListItem
+            key={id}
+            id={id}
+            chatName={chatName}
+            EnterChat={EnterChat}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+  },
+});

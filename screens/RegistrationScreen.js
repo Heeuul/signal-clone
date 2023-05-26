@@ -80,6 +80,8 @@ export default function RegistrationScreen({ navigation, route }) {
         title={"Register Account"}
         onPress={Register}
         raised
+        disabled={!name || !email || !password}
+        disabledStyle={styles.disabledButton}
       />
       <View style={{ height: 100 }} />
     </KeyboardAvoidingView>
@@ -96,4 +98,5 @@ const styles = StyleSheet.create({
   },
   inputContainer: { width: 300 },
   button: { width: 200, marginTop: 10 },
+  disabledButton: { backgroundColor: "lightgray", width: 200, marginTop: 10 },
 });

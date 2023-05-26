@@ -34,7 +34,12 @@ export default function AddChat({ navigation }) {
           <Icon name="wechat" type="antdesign" size={24} color={"black"} />
         }
       />
-      <Button title={"Create New Chat"} onPress={CreateChat} />
+      <Button
+        title={"Create New Chat"}
+        onPress={CreateChat}
+        disabled={!chatName}
+        disabledStyle={{ backgroundColor: "lightgray" }}
+      />
     </View>
   );
 }
